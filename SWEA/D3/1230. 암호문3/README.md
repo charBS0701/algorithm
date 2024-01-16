@@ -13,3 +13,8 @@
 
 
 > 출처: SW Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
+>
+> ---
+> switch 문의 case가 다르더라도 변수 이름이 같으면 안된다.
+>
+> 함수안에서 입력을 받기위해 매개변수로 sc를 줬다
