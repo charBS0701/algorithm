@@ -13,11 +13,11 @@ public class Main {
 		}
 		
 		long from=1;
-		long to=(long)Math.pow(2, 31)-1;
+		long to=(long)Math.pow(2, 31)-1;	
+		long mid; 
 		
-		long mid; // 중간값을 저장할 변수를 추가하였습니다.
-		while (from <= to) {
-		    mid = (from + to) / 2;
+		while (from < to) {	// 이진탐색
+		    mid = (from + to) / 2 + 1;
 		    long total = 0;
 		    for (int i = 0; i < K; i++) {
 		        total += wires[i] / mid;
@@ -25,9 +25,9 @@ public class Main {
 		    if (total < N) {
 		        to = mid - 1;
 		    } else {
-		        from = mid + 1;
+		        from = mid;
 		    }
 		}
-		System.out.println(from - 1);
+		System.out.println(from);
 	}
 }
