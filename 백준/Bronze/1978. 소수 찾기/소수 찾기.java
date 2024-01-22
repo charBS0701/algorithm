@@ -13,9 +13,11 @@ public class Main {
 			isPrime[i] = true;	// 일단 소수로
 		}
 		isPrime[1] = false;		// 1은 소수아님
-		
+		// 에라토스테네스의 체
 		for (int i = 2; i*i <= 1000; i++) {
 			for (int j = i+i; j <= 1000; j+=i) {
+//			for(int j = i*i; j<=1000; j+=i)
+//			i*i 미만은 이미 처리되었으므로 j의 시작값은 i*i로 최적화할 수 있다.
 				isPrime[j] = false;
 			}
 		}
