@@ -42,6 +42,13 @@ public class Main {
 			else if (dna[i+P-1] == 'T') req[3]--;
 			check();
 		}
+		// // P 이후 한 개씩 처리
+		// // 이전 P개 중 맨 앞 문자는 제거, 새문자가 맨 뒤에 추가
+		// for (int i = P; i < S; i++) {	// 이렇게도 가능
+		// 	cnt[dna[i - P] - 'A']--;
+		// 	cnt[dna[i] - 'A']++;
+		// 	check();
+		// }
 				
 		System.out.println(result);
 	}
