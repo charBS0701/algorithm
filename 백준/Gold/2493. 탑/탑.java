@@ -29,7 +29,6 @@ public class Main {
 					stack.pop();					// pop
 				} else {	
 					sb.append(stack.peek()).append(" ");	// 스택의 탑이 높으면 그 탑이 답
-					stack.push(i);							// 새로운 탑 push
 					break;
 				}
 			}			
