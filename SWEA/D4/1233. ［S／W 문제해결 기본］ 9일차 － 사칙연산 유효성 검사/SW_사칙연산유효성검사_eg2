@@ -1,0 +1,55 @@
+package basic;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+// 1차원 배열 <= 이진 트리 표현
+// 노드의 유효성
+//	노드가 숫자이면 자식이 없어야 한다.
+//	노드가 연산자이면 자식노드 2개의 유효성에 의존
+public class SW_사칙연산유효성검사_1233_2 {
+
+	static int N, ans;
+	static char[] node;
+	static StringBuilder sb = new StringBuilder();
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		for (int t = 1; t <= 10; t++) {
+			N = Integer.parseInt(br.readLine());
+			node = new char[N + 1];
+
+			for (int i = 1; i <= N; i++) {
+				node[i] = br.readLine().split(" ")[1].charAt(0); // 두번째 입력항목만
+			}
+			if (N % 2 == 0) { // 자식 노드가 1개인 경우 바로 0 처리
+				sb.append("#").append(t).append(" ").append(0).append("\n");
+				continue;
+			}
+
+			// 재귀호출
+			ans = dfs(1) ? 1 : 0; // root 부터 재귀호출 시작
+			sb.append("#").append(t).append(" ").append(ans).append("\n");
+		}
+		System.out.println(sb);
+	}
+
+	// x 위치의 노드가 유효한지 return
+	static boolean dfs(int x) {
+		// 기저 조건
+		if (x > N)
+			return false;
+
+		if (Character.isDigit(node[x])) { // 숫자 노드 -> 자식이 없어야 한다
+			if (x * 2 > N)
+				return true;
+			return false;
+		} else { // 연산자 노드
+			// 두 자식 노드의 유효성에 의존
+			// 두 자식 노드가 모두 유효해야 true
+			return dfs(x*2) && dfs(x*2+1);
+		}
+		
+	}
+
+}
