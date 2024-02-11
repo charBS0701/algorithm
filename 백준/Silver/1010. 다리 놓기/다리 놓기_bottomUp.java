@@ -20,6 +20,12 @@ public class 다리놓기_topdown {
 			}
 		}
 		
+		for (int i = 2; i < 30; i++) {
+			for (int j = 1; j < i; j++) {
+				dp[i][j] = dp[i-1][j-1] + dp[i-1][j];
+			}
+		}
+		
 		
 
 		int T = Integer.parseInt(br.readLine());
@@ -28,16 +34,9 @@ public class 다리놓기_topdown {
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
 
-			sb.append(comb(M, N)).append("\n");
+			sb.append(dp[M][N]).append("\n");
 		}
 		System.out.println(sb);
-	}
-
-	static int comb(int m, int n) {
-		if (dp[m][n] != 0) return dp[m][n];
-		else {
-			return dp[m][n] = comb(m-1,n-1) + comb(m-1,n);
-		}
 	}
 
 }
