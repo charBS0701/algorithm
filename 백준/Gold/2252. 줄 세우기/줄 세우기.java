@@ -50,14 +50,13 @@ public class Main {
 			// 디큐 
 			int now = que.poll();
 			for (int i : graph[now]) {
-				if (graph[now].contains(i)) {
 					indegrees[i]--;
 					if (indegrees[i] == 0) {
 						que.offer(i);
 						indegrees[i]--;	// 방문처리
 						sb.append(i).append(" ");	// 출력
 						
-					}
+				
 				}
 			}
 			
