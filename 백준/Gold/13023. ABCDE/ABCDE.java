@@ -1,51 +1,55 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
+import java.util.StringTokenizer;
 
-public class Main {
+public class Main{
+	
+	static int N,M;
+	static List<Integer>[] A;
 	static boolean visited[];
-	static ArrayList<Integer>[] A;
-	static boolean arrive;
-
-	public static void main(String[] args) {
-		int N; // 노드 개수
-		int M; // 에지 개수
-		arrive = false;
-		Scanner scan = new Scanner(System.in);
-		N = scan.nextInt();
-		M = scan.nextInt();
+	static int count=1;
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
 		A = new ArrayList[N];
 		visited = new boolean[N];
 		for (int i = 0; i < N; i++) {
-			A[i] = new ArrayList<Integer>();
+			A[i] = new ArrayList<>();
 		}
+		
 		for (int i = 0; i < M; i++) {
-			int S = scan.nextInt();
-			int E = scan.nextInt();
-			A[S].add(E);
-			A[E].add(S);
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			A[a].add(b);
+			A[b].add(a);
 		}
+		
 		for (int i = 0; i < N; i++) {
-			DFS(i, 1); // depth 1부터 시작
-			if (arrive)
-				break;
+			dfs(i,count);
+			if (count==5) break;
 		}
-		if (arrive)
-			System.out.println("1");
-		else
-			System.out.println("0"); // 5의 깊이가 없다면 0 출력
+		
+		System.out.println(count==5 ? 1 : 0);
 	}
-
-	public static void DFS(int now, int depth) { // DFS 구현하기
-		if (depth == 5 || arrive) { // depth 가 5가 되면 프로그램 종료
-			arrive = true;
+	
+	static void dfs(int start, int depth) {
+		visited[start] = true;
+		if (depth == 5) {
+			count = depth;
 			return;
 		}
-		visited[now] = true;
-		for (int i : A[now]) {
-			if (!visited[i]) {
-				DFS(i, depth + 1); // 재귀 호출이 될 때마다 depth 를 1씩 증가
-			}
+		
+		for(int next : A[start]) {
+			if (visited[next]) continue;
+			dfs(next, depth+1);
 		}
-		visited[now] = false;
+		visited[start] = false;
 	}
 }
