@@ -1,41 +1,50 @@
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 public class Main {
-
-	static int count = 0;	// 바이러스 옮은 컴퓨터 수
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int N = sc.nextInt();	// 컴퓨터의 수	// 1<= <= 100
-		int M = sc.nextInt();	// 직접연결돼 있는 컴퓨터의 쌍 수
-
+	
+	static int N, K;
+	static int result;
+	static boolean visit[];
+	static List<List<Integer>> list;
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());	// 사람 수 
+		K = Integer.parseInt(br.readLine());	// 연결 쌍의 수
+		visit = new boolean[N+1];
 		
-		// 인접행렬
-		int[][] mat = new int[N+1][N+1];
-		int[] visited = new int[N+1];
-		
-		for (int i = 1; i <= N; i++) {
-			mat[i][i]=1;
+		list = new ArrayList<>();
+		for (int i = 0; i <= N; i++) {
+			list.add(new ArrayList<Integer>());
 		}
 		
-		for (int m = 0; m < M; m++) {	// 연결돼 있는 쌍 입력
-			int from = sc.nextInt();
-			int to = sc.nextInt();
-			mat[from][to] = 1;
-			mat[to][from] = 1;
+		
+		for (int k = 0; k < K; k++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			int s = Integer.parseInt(st.nextToken());	
+			int e = Integer.parseInt(st.nextToken());
+			list.get(s).add(e);
+			list.get(e).add(s);
+			
 		}
 		
-		dfs(1, mat, visited);
+		dfs(1);
 		
-		System.out.println(count-1);	// 1제외
-		
-	}
-	public static void dfs(int node, int[][] mat, int[] visited) {
-		for (int i = 1; i < visited.length; i++) {
-			if (mat[node][i] == 1 && visited[i] != 1) {
-				count++;
-				visited[i] = 1;
-				dfs(i, mat, visited);
-			}
-		}
+		System.out.println(result);
 	}
 	
+	static void dfs(int start) {
+		visit[start] = true;
+		
+		for(int next : list.get(start)) {
+			if (visit[next]) continue;
+			visit[next] = true;
+			result++;
+			dfs(next);
+		}
+	}
+
 }
