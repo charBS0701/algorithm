@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 public class Main {
 	static int N, d, k, c;
-	static List<Integer> sushi = new LinkedList<>();
+	static int[] arr;
 	static int[] visit = new int[3001]; // 초밥의 종류 1~3000
 	static int result;
 	static int max;
@@ -19,17 +19,17 @@ public class Main {
 		k = Integer.parseInt(st.nextToken()); // 연속먹는 접시 수
 		c = Integer.parseInt(st.nextToken()); // 쿠폰 번호
 
+		arr = new int[N];
 		for (int n = 0; n < N; n++) {
-			int next = Integer.parseInt(br.readLine());
-			sushi.add(next);
+			arr[n] = Integer.parseInt(br.readLine());
 		}
 
 		for (int i = 0; i < k; i++) {
-			int now = sushi.get(i);
-			visit[now]++;
-			if (visit[now] == 1)
+			visit[arr[i]]++;
+			if (visit[arr[i]] == 1)
 				result++;
 		}
+		
 		if (visit[c] == 0)
 			result++;
 		max = Math.max(max, result);
@@ -40,12 +40,12 @@ public class Main {
 			int idx = i + k;
 			if (i + k >= N)
 				idx %= N;
-			int next = sushi.get(idx);
+			int next = arr[idx];
 			visit[next]++;
 			if (visit[next] == 1)
 				result++;
-			visit[sushi.get(i)]--;
-			if (visit[sushi.get(i)] == 0)
+			visit[arr[i]]--;
+			if (visit[arr[i]] == 0)
 				result--;
 
 			if (visit[c] == 0)
