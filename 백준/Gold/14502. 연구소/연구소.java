@@ -13,7 +13,7 @@ public class Main {
 	static int map[][];
 	static Room[] select = new Room[3];
 	static List<Room> list = new ArrayList<>();
-	static List<Room> virus =  new ArrayList<>();
+	static List<Room> virus = new ArrayList<>();
 	static int max = 0;
 	static int[] dy = { -1, 1, 0, 0 }; // 상하좌우
 	static int[] dx = { 0, 0, -1, 1 };
@@ -39,26 +39,28 @@ public class Main {
 
 		// 풀이
 		comb(0, 0);
-		
+
 		System.out.println(max);
 
 	}
 
-	static void bfs(int y, int x) {
-		Queue<int[]> que = new ArrayDeque<>();
+	static void bfs() {
+		Queue<Room> que = new ArrayDeque<>();
 		visit = new boolean[N + 1][M + 1];
-		que.offer(new int[] { y, x });
-		visit[y][x] = true;
+		for (Room tmp : virus) {
+			que.offer(tmp);
+			visit[tmp.y][tmp.x] = true;
+		}
 
 		while (!que.isEmpty()) {
-			int[] cur = que.poll();
+			Room cur = que.poll();
 			for (int d = 0; d < 4; d++) {
-				int ny = cur[0] + dy[d];
-				int nx = cur[1] + dx[d];
+				int ny = cur.y + dy[d];
+				int nx = cur.x + dx[d];
 				if (ny < 1 || nx < 1 || ny > N || nx > M || visit[ny][nx] || map[ny][nx] != 0)
 					continue;
 				map[ny][nx] = 4;
-				que.offer(new int[] { ny, nx });
+				que.offer(new Room(ny, nx));
 				visit[ny][nx] = true;
 			}
 		}
@@ -71,10 +73,7 @@ public class Main {
 			map[tmp.y][tmp.x] = 3; // 새로운 벽은 3
 		}
 		// 바이러스 퍼뜨리기
-		for (int i = 0; i < virus.size(); i++) {
-			Room tmp = virus.get(i);
-			bfs(tmp.y, tmp.x);
-		}
+		bfs();
 		// 안전구역 수 세기
 		int count = 0;
 		for (int i = 1; i <= N; i++) {
@@ -84,7 +83,7 @@ public class Main {
 			}
 		}
 		max = Math.max(max, count);
-		// 벽 원상복구		// 바이러스 원상복구
+		// 벽 원상복구 // 바이러스 원상복구
 		for (int i = 1; i <= N; i++) {
 			for (int j = 1; j <= M; j++) {
 				if (map[i][j] == 3 || map[i][j] == 4)
@@ -117,11 +116,6 @@ public class Main {
 		Room(int y, int x) {
 			this.y = y;
 			this.x = x;
-		}
-		
-		@Override
-		public String toString() {
-			return "y : " + y + ", x : " + x;
 		}
 	}
 
