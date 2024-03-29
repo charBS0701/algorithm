@@ -38,13 +38,15 @@ public class Main {
 		PriorityQueue<int[]> pq = new PriorityQueue<>((e1, e2) -> e1[1] - e2[1]); // 가중치작은순
 		pq.addAll(list.get(start));
 		visit[start] = true;
-
+		int count = 0;
 		while (!pq.isEmpty()) {
 			int[] now = pq.poll();
 			if (visit[now[0]])
 				continue;
 			visit[now[0]] = true;
 			result += now[1];
+			count++;
+			if( count == V-1) break;
 			for (int[] next : list.get(now[0])) {
 				if (!visit[next[0]])
 					pq.add(next);
