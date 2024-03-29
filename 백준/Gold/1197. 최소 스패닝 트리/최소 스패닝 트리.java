@@ -1,58 +1,77 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
-
+// 크루스칼
 public class Main {
 	static int V, E, result;
-	static boolean[] visit;
-	static List<List<int[]>> list = new ArrayList<>();
-
+	static List<Edge> list = new ArrayList<>();
+	static int[] parent;
+	
+	static class Edge{
+		int v1, v2, w;
+		Edge(int v1, int v2, int w) {
+			this.v1=v1; this.v2=v2; this.w=w;
+		}
+	}
+	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		V = Integer.parseInt(st.nextToken());
 		E = Integer.parseInt(st.nextToken());
-		visit = new boolean[V + 1];
-		for (int i = 0; i <= V; i++) {
-			list.add(new ArrayList<>());
-		}
 		for (int i = 0; i < E; i++) {
 			st = new StringTokenizer(br.readLine());
 			int s = Integer.parseInt(st.nextToken());
 			int e = Integer.parseInt(st.nextToken());
 			int w = Integer.parseInt(st.nextToken());
-			list.get(s).add(new int[] { e, w });
-            list.get(e).add(new int[] { s, w });
+			list.add(new Edge(s,e,w));
 		}
+		
+		Collections.sort(list, (e1, e2) -> e1.w - e2.w);  // 정렬
 
 		// 풀이
-		prim(1);
+		makeSet();
+		kruskal();
 		System.out.println(result);
 
 	}
 
-	static void prim(int start) {
-		PriorityQueue<int[]> pq = new PriorityQueue<>((e1, e2) -> e1[1] - e2[1]); // 가중치작은순
-		pq.addAll(list.get(start));
-		visit[start] = true;
+	static void kruskal() {
 		int count = 0;
-		while (!pq.isEmpty()) {
-			int[] now = pq.poll();
-			if (visit[now[0]])
-				continue;
-			visit[now[0]] = true;
-			result += now[1];
+		for(Edge edge : list) {
+			if (count == V-1) break;
+			if (!union(edge.v1, edge.v2)) continue;
+			result += edge.w;
 			count++;
-			if( count == V-1) break;
-			for (int[] next : list.get(now[0])) {
-				if (!visit[next[0]])
-					pq.add(next);
-			}
-
 		}
-
+	}
+	
+	static void makeSet() {
+		parent = new int[V+1];
+		for (int i = 1; i <= V; i++) {
+			parent[i] = i;
+		}
+	}
+	static int findSet(int x) {
+		if (parent[x] == x) return x;
+		else return parent[x] = findSet(parent[x]);
+	}
+	
+	static boolean union(int x1, int x2) {
+		int p1 = findSet(x1);
+		int p2 = findSet(x2);
+		if (p1 == p2) return false;
+		else {
+			if (p1 < p2) {
+				parent[p2] = parent[p1];
+			} else {
+				parent[p1] = parent[p2];
+			}
+			return true;
+		}
 	}
 }
