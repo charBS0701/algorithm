@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.util.PriorityQueue;
 
 public class Solution {
 	static int T, N;		
@@ -41,7 +39,7 @@ public class Solution {
 	}
 	
 	static void bfs(int y, int x) {
-		Queue<int[]> que = new ArrayDeque<>();
+		PriorityQueue<int[]> que = new PriorityQueue<>((o1,o2) -> o1[2]-o2[2]);
 		que.offer(new int[] {y,x,map[y][x]});	// 시작지 0,0,0 인큐
 		
 		while (! que.isEmpty() ) {
