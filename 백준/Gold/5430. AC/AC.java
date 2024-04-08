@@ -1,16 +1,13 @@
 // 5430 AC
 // https://www.acmicpc.net/problem/5430
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
 	static int T;
-	static List<String> list = new ArrayList<>();
+	static Deque<String> list = new ArrayDeque<>();
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,8 +17,8 @@ public class Main {
 			String func = br.readLine(); // 길이 : 1~100_000
 			list.clear();
 			int n = Integer.parseInt(br.readLine()); // 배열에 들어있는 수의 개수 0~100_000
-			boolean errorFlag = false;
-			boolean reversed = false;
+			boolean errorFlag = false; // 에러 발생 여부
+			boolean reversed = false; // 순서 뒤집기 여부
 			String s = br.readLine();
 
 			boolean numberStart = false;
@@ -32,29 +29,29 @@ public class Main {
 					numberStart = true;
 					startIdx = i;
 				} else if (!(c >= '0' && c <= '9') && numberStart) { // 숫자 다 나옴
-					list.add(s.substring(startIdx, i));
+					list.offer(s.substring(startIdx, i));
 					numberStart = false;
 				}
 			}
 
-			for (int i = 0; i < func.length(); i++) {
+			for (int i = 0; i < func.length(); i++) { // 명령어 처리
 				char c = func.charAt(i);
 				switch (c) {
-				case 'R':
+				case 'R': // 뒤집기 표시만
 					if (!reversed) {
 						reversed = true;
 					} else {
 						reversed = false;
 					}
 					break;
-				case 'D':
+				case 'D': // 뒤집기일때와 아닐때 지우는 위치 다름
 					if (list.isEmpty())
 						errorFlag = true;
 					else {
 						if (!reversed)
-							list.remove(0);
+							list.pollFirst(); // ArrayDeque 가 성능 더 좋을 듯
 						else
-							list.remove(list.size() - 1);
+							list.pollLast();
 					}
 					break;
 				}
@@ -62,20 +59,20 @@ public class Main {
 					break;
 			}
 
-			if (errorFlag)
+			// 출력 처리
+			if (errorFlag) // 에러일 때
 				sb.append("error");
 			else {
 				sb.append("[");
-				if (!reversed) {
+				if (!reversed) { // 안 뒤집힘
 					for (String str : list) {
 						sb.append(str).append(",");
 					}
-				} else {
-					for (int i = list.size()-1; i >= 0; i--) {
-						sb.append(list.get(i)).append(",");
-					}
+				} else { // 뒤집한 상태
+					while (!list.isEmpty())
+						sb.append(list.pollLast()).append(",");
 				}
-				if (sb.charAt(sb.length() - 1) == ',')
+				if (sb.charAt(sb.length() - 1) == ',') // 마지막 문자 처리
 					sb.deleteCharAt(sb.length() - 1);
 				sb.append("]");
 			}
