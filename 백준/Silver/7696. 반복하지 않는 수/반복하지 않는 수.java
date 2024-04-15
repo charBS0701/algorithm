@@ -1,5 +1,5 @@
-// 1676 팩토리얼 0의 개수
-// https://www.acmicpc.net/problem/1676
+// 7696 반복하지 않는 수 
+// https://www.acmicpc.net/problem/7696
 
 import java.io.*;
 import java.util.*;
