@@ -1,5 +1,5 @@
-// 9461 파도반 수열
-// https://www.acmicpc.net/problem/9461
+// 17626 Four Squares
+// https://www.acmicpc.net/problem/17626
 
 import java.io.*;
 import java.util.*;
