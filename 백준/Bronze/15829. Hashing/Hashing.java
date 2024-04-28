@@ -12,19 +12,19 @@ public class Main {
 		L = Integer.parseInt(br.readLine());
 		arr = br.readLine().toCharArray();
 
-		result = (int) arr[0] - 'a' + 1;	// 맨 앞 자리
-		
+		result = (int) arr[0] - 'a' + 1; // 맨 앞 자리
+
 		for (int i = 1; i < L; i++) {
 			int a = (int) arr[i] - 'a' + 1;
-			
-			int tmp = 1;
+
+			long tmp = 1;
 			for (int j = 1; j <= i; j++) {
-				tmp = tmp * 31 % 1234567891;	// 모듈러 연산
+				tmp = tmp * 31 % 1_234_567_891; // 모듈러 연산
 			}
 			result += a * tmp;
 		}
 
-		System.out.println(result);
+		System.out.println(result % 1_234_567_891);
 
 	}
 }
