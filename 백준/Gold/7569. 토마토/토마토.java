@@ -6,10 +6,11 @@ public class Main {
 	static int M, N, H;
 	static int[][][] tomatoes;
 	static Deque<Tomato> que = new ArrayDeque<>();
-	static int[] dz = {1,-1,0,0,0,0};  // 위 아래 왼 오 앞 뒤
-	static int[] dx = {0,0,-1,1,0,0};
-	static int[] dy = {0,0,0,0,-1,1};
+	static int[] dz = { 1, -1, 0, 0, 0, 0 }; // 위 아래 왼 오 앞 뒤
+	static int[] dx = { 0, 0, -1, 1, 0, 0 };
+	static int[] dy = { 0, 0, 0, 0, -1, 1 };
 	static int result = -1;
+	static boolean done = true;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,44 +26,44 @@ public class Main {
 					tomatoes[m][n][h] = Integer.parseInt(st.nextToken());
 					if (tomatoes[m][n][h] == 1)
 						que.offer(new Tomato(m, n, h, 0));
+					else if (tomatoes[m][n][h] == 0)
+						done = false;
 				}
 			}
 		}
 
-		if (check()) { // 처음부터 다익음
+		if (done) { // 처음부터 다익음
 			System.out.println(0);
 			return;
 		}
-		
+
 		bfs();
-		
+
 		System.out.println(result);
 	}
 
 	static void bfs() {
 		int day = 0;
-		while(!que.isEmpty()) {
+		while (!que.isEmpty()) {
 			Tomato t = que.poll();
-			if (t.day != day) {
-				if (check()) {		// 토마토 다익음
-					result = t.day;
-					return;
-				} else day = t.day;	// 다음 날짜로 갱신
-			}
-			
+			day = t.day;
+
 			for (int d = 0; d < 6; d++) {
 				int nm = t.m + dx[d];
 				int nn = t.n + dy[d];
 				int nh = t.h + dz[d];
-				if (!isValid(nm, nn, nh)) continue;
-				if (tomatoes[nm][nn][nh] != 0) continue;
+				if (!isValid(nm, nn, nh))
+					continue;
+				if (tomatoes[nm][nn][nh] != 0)
+					continue;
 				// 덜익은 토마토인 경우
-				que.offer(new Tomato(nm, nn, nh, day+1));
-				tomatoes[nm][nn][nh] = 1;	// 익음
+				que.offer(new Tomato(nm, nn, nh, day + 1));
+				tomatoes[nm][nn][nh] = 1; // 익음
 			}
 		}
-		if (check()) result = day;
-		
+		if (check())
+			result = day;
+
 	}
 
 	static class Tomato {
@@ -87,9 +88,11 @@ public class Main {
 		}
 		return true;
 	}
-	
+
 	static boolean isValid(int nm, int nn, int nh) {
-		if (nm < 0 || nn < 0 || nh < 0 || nm >= M || nn >= N || nh >= H) return false;
-		else return true;
+		if (nm < 0 || nn < 0 || nh < 0 || nm >= M || nn >= N || nh >= H)
+			return false;
+		else
+			return true;
 	}
 }
