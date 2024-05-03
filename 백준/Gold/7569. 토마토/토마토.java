@@ -5,7 +5,7 @@ public class Main {
 
 	static int M, N, H;
 	static int[][][] tomatoes;
-	static PriorityQueue<Tomato> que = new PriorityQueue<>((o1,o2) -> o1.day - o2.day);
+	static Deque<Tomato> que = new ArrayDeque<>();
 	static int[] dz = {1,-1,0,0,0,0};  // 위 아래 왼 오 앞 뒤
 	static int[] dx = {0,0,-1,1,0,0};
 	static int[] dy = {0,0,0,0,-1,1};
