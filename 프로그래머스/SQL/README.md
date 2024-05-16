@@ -5,4 +5,4 @@
 - TO_DATE, TO_CHAR, TO_NUMBER 로 type 잘 맞춰서 계산
 - sum() 같은 집계함수는 SELECT 절에서만 쓸 수 있다
 - join 할 때 테이블 뒤에 , 붙이면 안된다
-- 
+- SELECT 하려면 억지로 GROUP BY 해야한다
