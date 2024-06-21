@@ -5,16 +5,10 @@ class Solution {
         double answer = 1;
         
         // 대소문자 대문자로 통일
+        str1 = str1.toUpperCase();
+        str2 = str2.toUpperCase();
         char[] arr1 = str1.toCharArray();
-        char[] arr2 = str2.toCharArray();
-        for (int i=0; i<arr1.length; i++) {
-            char c = arr1[i];
-            if (c >= 'a' && c <= 'z') arr1[i] -= 'a'-'A';                
-        }
-        for (int i=0; i<arr2.length; i++) {
-            char c = arr2[i];
-            if (c >= 'a' && c <= 'z') arr2[i] -= 'a'-'A';                
-        }        
+        char[] arr2 = str2.toCharArray();     
         
         // 쌍들 map 에 개수 입력 (str1, str2 따로)
         Map<String,Integer> map1 = new HashMap<>();
@@ -78,11 +72,7 @@ class Solution {
           
         }       
         
-        if (map1.size()==0 && map2.size()==0) {
-            answer = 1;
-        } else if (numCnt == 0) {
-            answer = 0;  
-        } else {
+        if (!(map1.size()==0 && map2.size()==0)) {
             answer = (double)numCnt/denCnt;
         }
         answer = Math.floor(answer * 65536);
