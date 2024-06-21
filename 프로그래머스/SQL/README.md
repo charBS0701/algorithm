@@ -8,3 +8,4 @@
 - SELECT 하려면 억지로 GROUP BY 해야한다
 - COUNT(*) 는 모든 행의 개수를 세고 COUNT(NAME)은 NULL이 아닌 값의 수를 센다
 - 문자열 잇기 ||
+- WHERE 절에서는 집계함수를 쓸 수 없지만 HAVING 절에서는 가능하다
