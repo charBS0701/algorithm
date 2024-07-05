@@ -9,7 +9,7 @@ class Solution {
             map.put(c, map.get(c)-1);
             if (map.get(c)==0) map.remove(c);
         }
-        String result = map.keySet().toString();
-        return result.substring(1,result.length()-1);
+        
+        return map.keySet().stream().toArray(String[]::new)[0];
     }
 }
