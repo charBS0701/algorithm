@@ -9,3 +9,5 @@
 - COUNT(*) 는 모든 행의 개수를 세고 COUNT(NAME)은 NULL이 아닌 값의 수를 센다
 - 문자열 잇기 ||
 - WHERE 절에서는 집계함수를 쓸 수 없지만 HAVING 절에서는 가능하다
+- ORDER BY 에서는 SELECT 의 ALIAS 를 쓸 수 있지만 JOIN ON 에서는 못 쓴다
+- EXTRACT(part FROM date) &nbsp;&nbsp; part can be one of [these](https://www.w3schools.com/sql/func_mysql_extract.asp)
