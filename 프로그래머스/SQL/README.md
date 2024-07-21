@@ -11,4 +11,5 @@
 - WHERE 절에서는 집계함수를 쓸 수 없지만 HAVING 절에서는 가능하다
 - ORDER BY 에서는 SELECT 의 ALIAS 를 쓸 수 있지만 JOIN ON 에서는 못 쓴다
 - EXTRACT(part FROM date) &nbsp;&nbsp; part can be one of [these](https://www.w3schools.com/sql/func_mysql_extract.asp)
-  -   mysql : YEAR(date) 가능 
+  -   mysql : YEAR(date) 가능
+  -   orcale : TO_CHAR(date, 'YYYY')
