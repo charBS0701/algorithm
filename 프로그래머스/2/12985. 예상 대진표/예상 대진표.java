@@ -15,8 +15,7 @@ class Solution
         }
         
         answer++;   // 1차에서 같은 조 일 때
-        while (true) {
-            if (a == b) break;
+        while (a != b) {
             answer++;
             a = (a-1) / 2 + 1;
             b = (b-1) / 2 + 1;
