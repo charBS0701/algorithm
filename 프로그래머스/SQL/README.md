@@ -13,6 +13,8 @@
 - EXTRACT(part FROM date) &nbsp;&nbsp; part can be one of [these](https://www.w3schools.com/sql/func_mysql_extract.asp)
   -   mysql : YEAR(date) 가능
   -   orcale : TO_CHAR(date, 'YYYY')
+      -   TO_CHAR(date, 'MM') : 1월일 경우 01 반환 (문자열)
+      -   EXTRACT(MONTH FROM date) : 1월일 경우 1 반환 (정수)
  
 ### NULL
 - NULL 값은 SQL에서 특별한 의미를 가지고 있어서, NOT IN 조건에서 NULL 값과의 비교는 항상 실패
