@@ -1,0 +1,11 @@
+-- 희귀도가 RARE인 아이템의 다음 업그레이드된 아이템을 조회
+SELECT i.ITEM_ID, i.ITEM_NAME, i.RARITY
+FROM ITEM_INFO i
+JOIN ITEM_TREE t ON i.ITEM_ID = t.ITEM_ID
+WHERE t.PARENT_ITEM_ID IN (
+    -- RARE 희귀도의 아이템을 찾는 서브쿼리
+    SELECT ITEM_ID
+    FROM ITEM_INFO
+    WHERE RARITY = 'RARE'
+)
+ORDER BY i.ITEM_ID DESC;
