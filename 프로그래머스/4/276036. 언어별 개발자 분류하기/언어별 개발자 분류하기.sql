@@ -1,0 +1,64 @@
+WITH SUB AS (
+    SELECT ID, EMAIL, NAME, CATEGORY
+    FROM
+        SKILLCODES S
+    JOIN
+        DEVELOPERS D
+    WHERE
+        S.CODE & D.SKILL_CODE != 0
+), 
+FRONT AS (
+    SELECT
+        *
+    FROM    
+        SUB
+    WHERE
+        CATEGORY = 'Front End'
+),
+PYTHON AS (
+    SELECT
+        *
+    FROM 
+        SUB
+    WHERE
+        NAME = 'Python'
+),
+CSHOP AS (
+    SELECT *
+    FROM SUB
+    WHERE NAME = 'C#'
+),
+A AS (
+    SELECT F.ID, F.EMAIL, 'A' GRADE
+    FROM FRONT F
+    JOIN PYTHON P
+    WHERE F.ID = P.ID
+),
+B AS (
+    SELECT CSHOP.ID, CSHOP.EMAIL, 'B' GRADE
+    FROM CSHOP
+    WHERE CSHOP.ID NOT IN (SELECT A.ID FROM A)
+),
+C AS (
+    SELECT F.ID, F.EMAIL, 'C' GRADE
+    FROM FRONT F
+    WHERE 1
+        AND F.ID NOT IN (SELECT A.ID FROM A) 
+        AND F.ID NOT IN (SELECT B.ID FROM B)
+)
+
+(SELECT
+    GRADE, ID, EMAIL
+FROM
+    A)
+UNION
+(SELECT
+    GRADE, ID, EMAIL
+FROM
+    B)
+UNION
+(SELECT
+    GRADE, ID, EMAIL
+FROM
+    C)
+ORDER BY GRADE, ID
