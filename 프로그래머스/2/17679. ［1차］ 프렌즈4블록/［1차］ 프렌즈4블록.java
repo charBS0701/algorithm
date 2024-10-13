@@ -1,80 +1,67 @@
 import java.util.*;
 
-class Solution {
-    static int answer;
-    static int prev;
-    static char[][] mat;
+public class Solution {
+    
     public int solution(int m, int n, String[] board) {
-        mat = new char[m][n];
-        for (int i=0; i<m; i++) {
-            for (int j=0; j<n; j++) {
-                mat[i][j] = board[m-1-i].charAt(j);
-            }
+        char[][] mat = new char[m][n];
+        
+        // 입력된 문자열 배열을 2D char 배열로 변환
+        for (int i = 0; i < m; i++) {
+            mat[i] = board[i].toCharArray();
         }
         
+        int totalRemoved = 0;
+        
         while (true) {
-            boolean flag = false;   // 블록 지움 플래그
-            // 복사본 생성
-            char[][] copy = new char[m][n];
-            for (int i=0; i<m; i++) {
-                for (int j=0; j<n; j++) {
-                    copy[i][j] = mat[i][j];
-                }
-            }            
+            // 1. 2x2 블록 찾기
+            boolean[][] toRemove = new boolean[m][n];
+            boolean found = false;
             
-            // 같은블록 찾기
-            for (int i=0; i<m-1; i++) {
-                for (int j=0; j<n-1; j++) {
-                    char c = mat[i][j];
-                    if (c == '-') continue;
-                    if (c == mat[i][j+1] && c == mat[i+1][j] && c == mat[i+1][j+1]) {
-                        if (copy[i][j] != '-') {
-                            flag = true;        // 지운 행위를 함
-                            answer++;           // 지운 갯수 증가
-                            copy[i][j] = '-';   // 없어짐 처리
-                        }
-                        if (copy[i][j+1] != '-') {
-                            flag = true;        // 지운 행위를 함
-                            answer++;           // 지운 갯수 증가
-                            copy[i][j+1] = '-';   // 없어짐 처리
-                        }
-                        if (copy[i+1][j] != '-') {
-                            flag = true;        // 지운 행위를 함
-                            answer++;           // 지운 갯수 증가
-                            copy[i+1][j] = '-';   // 없어짐 처리
-                        }
-                        if (copy[i+1][j+1] != '-') {
-                            flag = true;        // 지운 행위를 함
-                            answer++;           // 지운 갯수 증가
-                            copy[i+1][j+1] = '-';   // 없어짐 처리
-                        }                        
+            for (int i = 0; i < m - 1; i++) {
+                for (int j = 0; j < n - 1; j++) {
+                    if (mat[i][j] != ' ' && mat[i][j] == mat[i][j + 1] && mat[i][j] == mat[i + 1][j] && mat[i][j] == mat[i + 1][j + 1]) {
+                        toRemove[i][j] = true;
+                        toRemove[i][j + 1] = true;
+                        toRemove[i + 1][j] = true;
+                        toRemove[i + 1][j + 1] = true;
+                        found = true;
                     }
                 }
             }
             
-            if (!flag || prev == answer) break;   // 블럭을 안지웠으면 종료      
+            // 더 이상 지울 블록이 없으면 종료
+            if (!found) break;
             
-            // 다 돌았으면 업데이트
-            for (int i=0; i<m; i++) {
-                for (int j=0; j<n; j++) {
-                    if (copy[i][j] == '-') {    // 없어진 곳이면 채우기
-                        mat[i][j] = '-';
-                        for (int k=i+1; k<m; k++) {
-                            if (copy[k][j] != '-') {
-                                mat[i][j] = copy[k][j];
-                                copy[k][j] = '-';
-                                mat[k][j] = '-';
+            // 2. 블록 지우기
+            int removed = 0;
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (toRemove[i][j]) {
+                        mat[i][j] = ' ';
+                        removed++;
+                    }
+                }
+            }
+            totalRemoved += removed;
+            
+            // 3. 블록 떨어뜨리기
+            for (int j = 0; j < n; j++) {
+                for (int i = m - 1; i >= 0; i--) {
+                    if (mat[i][j] == ' ') {
+                        // 위쪽에서 블록을 찾아 내려보내기
+                        for (int k = i - 1; k >= 0; k--) {
+                            if (mat[k][j] != ' ') {
+                                mat[i][j] = mat[k][j];
+                                mat[k][j] = ' ';
                                 break;
-                            } else {
-                                mat[k][j] = '-';
                             }
                         }
                     }
                 }
-            }                
+            }
         }
         
-        
-        return answer;
+        return totalRemoved;
     }
+
 }
