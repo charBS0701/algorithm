@@ -1,60 +1,64 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-	
-	static int n,m;
-	static int[] parent;
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		StringBuilder sb = new StringBuilder();
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());	// 연산의 개수
-		parent = new int[n+1];
-		
-		// init
-		for (int i = 0; i <= n; i++) {
-			parent[i] = i;
-		}
-		
-		for (int i = 0; i < m; i++) {
-			st = new StringTokenizer(br.readLine());
-			int op = Integer.parseInt(st.nextToken());	// 0: 합, 1: 확인
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-			
-			if (op == 0) {
-				union(a,b);
-			} else if (op==1) {
-				sb.append(find(a) == find(b) ? "YES" : "NO").append("\n");
-			}
-		}
-		System.out.println(sb);
-		
-	}
-	
-	static int find(int a) {
-		if (parent[a] == a) return a;
-		else {
-			return parent[a] = find(parent[a]);
-		}
-	}
-	
-	static void union(int a, int b) {
-		a = find(a);
-		b = find(b);
-		if (a==b) {
-			return;
-		} else {
-			if (a < b) {
-				parent[b] = a;
-			} else {
-				parent[a] = b;
-			}
-		}
-		
-	}
-
+class Main {
+    
+    static int N, M;
+    static int[] parent;
+    static StringBuilder sb = new StringBuilder();
+    
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        
+        // makeSet
+        parent = new int[N+1];
+        makeSet();
+        
+        // 시뮬레이션
+        for (int m=0; m<M; m++) {
+            st = new StringTokenizer(br.readLine());
+            int oper = Integer.parseInt(st.nextToken());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            
+            if (oper == 0) {    // union
+                union(a,b);
+            } else if (oper == 1) {     // check if(findSet(a)==findSet(b))
+                if (findSet(a) == findSet(b)) {
+                    sb.append("YES").append("\n");
+                } else sb.append("NO").append("\n");
+            }
+        }
+    
+        System.out.println(sb);
+    
+    }
+    
+    static void makeSet() {
+        for (int n=0; n<=N; n++) {
+            parent[n] = n;
+        }
+    }
+    
+    static int findSet(int child) {
+        if (child == parent[child]) return child;
+        else return parent[child] = findSet(parent[child]);     // path 압축
+    }
+    
+    static boolean union(int a, int b) {
+        int parentA = findSet(a);
+        int parentB = findSet(b);
+        
+        if (parentA == parentB) return false;
+        else if (parentA < parentB) {
+            parent[parentB] = parentA;
+        } else {
+            parent[parentA] = parentB;
+        }
+        
+        return false;
+    }
 }
