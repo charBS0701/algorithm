@@ -52,9 +52,9 @@ class Main {
         if (parentA == parentB) {
             return false;
         } else if (parentA < parentB) {
-            parent[findSet(parentB)] = findSet(parentA);
+            parent[parentB] = parentA;
         } else {
-            parent[findSet(parentA)] = findSet(parentB);
+            parent[parentA] = parentB;
         }
         return true;
     }
