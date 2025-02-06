@@ -14,9 +14,7 @@ public class Main
     static int N, E;
     static int v1, v2;  // 반드시 지나야 하는 두 정점
     static List<List<Edge>> adjList = new ArrayList<>();
-    static int[] cost1;
-    static int[] costV1;
-    static int[] costV2;
+    static int[] cost1, costV1, costV2;
     static boolean[] visited;
     static final int INF = Integer.MAX_VALUE;
     
@@ -31,9 +29,6 @@ public class Main
 	    costV2 = new int[N+1];
 	    
 	    for (int n=0; n<=N; n++) {
-	        cost1[n] = INF;
-	        costV1[n] = INF;
-	        costV2[n] = INF;
 	        adjList.add(new ArrayList<Edge>());
 	    }
 	    
@@ -52,12 +47,9 @@ public class Main
 	    v1 = Integer.parseInt(st.nextToken());
 	    v2 = Integer.parseInt(st.nextToken());
 	    
-	    visited = new boolean[N+1];	    
-	    dijkstra(1,N,cost1);
-	    visited = new boolean[N+1];
-	    dijkstra(v1,v2,costV1);
-	    visited = new boolean[N+1];
-	    dijkstra(v2,v1,costV2);
+	    dijkstra(1, cost1);
+	    dijkstra(v1, costV1);
+	    dijkstra(v2, costV2);
 	    
 	    if (cost1[N] == INF) System.out.println(-1);
 	    else {
@@ -68,8 +60,9 @@ public class Main
 	    
 	}
 	
-	public static void dijkstra(int from, int to, int[] cost) {
-	    
+	public static void dijkstra(int from, int[] cost) {
+	    Arrays.fill(cost, INF);
+	    visited = new boolean[N + 1];
 	    PriorityQueue<Edge> pq = new PriorityQueue<>((o1,o2) -> (o1.c-o2.c));
 	    pq.offer(new Edge(from,0));    // 시작점 입력
 	    cost[from] = 0;
@@ -77,20 +70,17 @@ public class Main
 	    while (!pq.isEmpty()) {
 	        Edge pe = pq.poll();
 	        
-	        if (pe.c > cost[pe.v]) continue;    // 가지치기 
-	        if (visited[pe.v]) continue;    // 방문 pass
+	        if (pe.c > cost[pe.v]) continue;    // 가지치기 : 현재 꺼낸 노드가 이미 최소 비용이 아니라면 스킵
+	        if (visited[pe.v]) continue;     // 방문 pass
 	        
 	        visited[pe.v] = true;
 	        
 	        for (Edge ne : adjList.get(pe.v)) {
-	            if (!visited[ne.v] && 
-	                ne.c + cost[pe.v] < cost[ne.v])
-	                cost[ne.v] = ne.c + cost[pe.v];
+	            if (!visited[ne.v] &&
+	                    ne.c + cost[pe.v] < cost[ne.v])
+	                    cost[ne.v] = ne.c + cost[pe.v];
 	                pq.add(new Edge(ne.v, cost[ne.v]));
 	        }
 	    }
-	    
-	    
 	}
-	
 }
