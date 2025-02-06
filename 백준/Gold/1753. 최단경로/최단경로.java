@@ -57,7 +57,7 @@ public class Main
 	        Edge pe = pq.poll();
 	        if (pe.c > cost[pe.v]) continue;        // 가지치기
 	        
-	        if (visit[pe.v]) continue;      // 방문 pass
+	       // if (visit[pe.v]) continue;      // 방문 pass
 	        
 	        visit[pe.v] = true;     // 방문 처리
 	        
@@ -80,3 +80,5 @@ public class Main
 	    }
 	}
 }
+
+
