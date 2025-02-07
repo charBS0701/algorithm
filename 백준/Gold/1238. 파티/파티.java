@@ -45,8 +45,9 @@ class Main {
         for (int n=1; n<=N; n++) {
             if (n==X) continue;
             dijkstra(n, X);     // n->X 최단거리 roundX[n] 에 더하기
-            dijkstra(X, n);     // X->n 최단거리 roundX[n] 에 더하기
         }
+        
+        dijkstra(X, 0);
         
         Arrays.sort(roundX);
         System.out.println(roundX[N]);
@@ -77,8 +78,13 @@ class Main {
             
         }
         
-        if (from != X) roundX[from] += cost[to];
-        else roundX[to] += cost[to];
+        if (from != X) {
+            roundX[from] += cost[X];        // x -> X 거리
+        } else {
+            for (int n=1; n<=N; n++) {
+                roundX[n] += cost[n];       // X -> n 거리
+            }
+        }
         
     }
 }
