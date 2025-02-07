@@ -45,15 +45,15 @@ class Main {
         // (N -> X) + (X -> N)
         roundX = new int[N+1];
         
-        dijkstra(X, 0, reverseList);        // n -> X 거리 구하기
-        dijkstra(X, 0, originList);         // X -> n 거리 구하기
+        dijkstra(X, reverseList);        // n -> X 거리 구하기
+        dijkstra(X, originList);         // X -> n 거리 구하기
         
         Arrays.sort(roundX);
         System.out.println(roundX[N]);
         
     }
     
-    static void dijkstra(int from, int to, List<List<Vertex>> list) {
+    static void dijkstra(int from, List<List<Vertex>> list) {
         PriorityQueue<Vertex> pq = new PriorityQueue<>((o1,o2) -> o1.c - o2.c);
         cost = new int[N+1];
         Arrays.fill(cost, INF);
@@ -63,8 +63,6 @@ class Main {
         
         while (!pq.isEmpty()) {
             Vertex pv = pq.poll();
-            
-            if (pv.v == to) break;
             
             if (pv.c > cost[pv.v]) continue;
             
