@@ -13,7 +13,8 @@ class Main {
     }
     
     static int N, M, X;
-    static List<List<Vertex>> list = new ArrayList<>();
+    static List<List<Vertex>> originList = new ArrayList<>();
+    static List<List<Vertex>> reverseList = new ArrayList<>();
     static int[] cost;
     static int[] roundX;
     static final int INF = Integer.MAX_VALUE;
@@ -26,7 +27,8 @@ class Main {
         X = Integer.parseInt(st.nextToken());       // 파티 장소
         
         for (int n=0; n<=N; n++) {
-            list.add(new ArrayList<Vertex>());
+            originList.add(new ArrayList<Vertex>());
+            reverseList.add(new ArrayList<Vertex>());
         }
         
         
@@ -36,25 +38,22 @@ class Main {
             int to = Integer.parseInt(st.nextToken());
             int weight = Integer.parseInt(st.nextToken());
             
-            list.get(from).add(new Vertex(to, weight));
+            originList.get(from).add(new Vertex(to, weight));
+            reverseList.get(to).add(new Vertex(from, weight));
         }
         
         // (N -> X) + (X -> N)
         roundX = new int[N+1];
         
-        for (int n=1; n<=N; n++) {
-            if (n==X) continue;
-            dijkstra(n, X);     // n->X 최단거리 roundX[n] 에 더하기
-        }
-        
-        dijkstra(X, 0);
+        dijkstra(X, 0, reverseList);        // n -> X 거리 구하기
+        dijkstra(X, 0, originList);         // X -> n 거리 구하기
         
         Arrays.sort(roundX);
         System.out.println(roundX[N]);
         
     }
     
-    static void dijkstra(int from, int to) {
+    static void dijkstra(int from, int to, List<List<Vertex>> list) {
         PriorityQueue<Vertex> pq = new PriorityQueue<>((o1,o2) -> o1.c - o2.c);
         cost = new int[N+1];
         Arrays.fill(cost, INF);
@@ -78,12 +77,8 @@ class Main {
             
         }
         
-        if (from != X) {
-            roundX[from] += cost[X];        // x -> X 거리
-        } else {
-            for (int n=1; n<=N; n++) {
-                roundX[n] += cost[n];       // X -> n 거리
-            }
+        for (int n=1; n<=N; n++) {
+            roundX[n] += cost[n];        
         }
         
     }
