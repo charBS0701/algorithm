@@ -3,26 +3,13 @@ import java.util.*;
 
 class Main {
     
-    static class Dot implements Comparable<Dot> {
+    static class Dot {
         int y, x;
         boolean isCounted = false;
         
         public Dot(int y, int x) {
             this.y = y;
             this.x = x;
-        }
-        
-        @Override
-        public int compareTo(Dot o) {
-            if (this.y == o.y) return this.x-o.x;
-            return this.y - o.y;
-        }
-        
-        @Override
-        public boolean equals(Object o) {
-            Dot dot = (Dot) o;
-            if (this.y == dot.y && this.x == dot.x) return true;
-            return false;
         }
     }
     
@@ -31,7 +18,6 @@ class Main {
     static int[] dx = new int[]{0,0,-1,1};
     static int answer;
     static Dot[][] parents;
-    static boolean[][] isCounted;
     
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -63,12 +49,11 @@ class Main {
                     nx += dx[3];
                 }
                 
-                union(new Dot(n,m), new Dot(ny,nx));
+                union(parents[n][m], parents[ny][nx]);
                 
             }
         }
         
-        isCounted = new boolean[N][M];
         for (int n=0; n<N; n++) {
             for (int m=0; m<M; m++) {
                 Dot root = find(parents[n][m]);
@@ -94,7 +79,7 @@ class Main {
     }
     
     static Dot find(Dot dot) {
-        if (dot.equals(parents[dot.y][dot.x])) return parents[dot.y][dot.x];
+        if (dot == parents[dot.y][dot.x]) return dot;
         return parents[dot.y][dot.x] = find(parents[dot.y][dot.x]);
     }
     
@@ -102,13 +87,9 @@ class Main {
         Dot parentA = find(a);
         Dot parentB = find(b);
         
-        if (parentA.equals(parentB)) return false;
+        if (parentA == parentB) return false;
         
-        if (parentA.compareTo(parentB) < 0) {
-            parents[parentB.y][parentB.x] = parentA;
-        } else {
-            parents[parentA.y][parentA.x] = parentB;
-        }
+        parents[parentB.y][parentB.x] = parentA;
         return true;
     }
 }
