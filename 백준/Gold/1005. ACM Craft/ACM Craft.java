@@ -7,7 +7,6 @@ class Main {
     static int N, K;
     static int[] inDegrees;
     static List<List<Integer>> outGraph;
-    static List<List<Integer>> inGraph;
     static int[] dTimes;
     static int[] totalTime;
     static int W;
@@ -23,10 +22,8 @@ class Main {
             inDegrees = new int[N+1];               // 진입 차수
             totalTime = new int[N+1];
             outGraph = new ArrayList<>();
-            inGraph = new ArrayList<>();
             for (int n=0; n<=N; n++) {
                 outGraph.add(new ArrayList<>());
-                inGraph.add(new ArrayList<>());
             }
             
             K = Integer.parseInt(st.nextToken());   // 규칙 수
@@ -42,7 +39,6 @@ class Main {
                 int b = Integer.parseInt(st.nextToken());
                 inDegrees[b]++;     // 진입차수 증가
                 outGraph.get(a).add(b);
-                inGraph.get(b).add(a);
             }
             
             W = Integer.parseInt(br.readLine());     // 목표 건물
@@ -59,17 +55,12 @@ class Main {
         for (int n=1; n<=N; n++) {
             if (inDegrees[n] == 0) {
                 que.add(n);
+                totalTime[n] = dTimes[n];   // 초기 건물 짓는 시간
             }
         }
             
         while (!que.isEmpty()) {
             int now = que.poll();
-            // 현재건물 짓기 전까지 걸린 시간
-            for (int pre : inGraph.get(now)) {
-                totalTime[now] = Math.max(totalTime[now], totalTime[pre]);
-            }
-            
-            totalTime[now] += dTimes[now];  // 현재 건물 지음
             
             if (now == W) {     // 목표건물 지을시 return
                 sb.append(totalTime[now]).append("\n");
@@ -78,6 +69,7 @@ class Main {
             
             for (int next : outGraph.get(now)) {
                 inDegrees[next]--;
+                totalTime[next] = Math.max(totalTime[next], totalTime[now] + dTimes[next]);
                 if (inDegrees[next] == 0) {
                     que.add(next);
                 }
