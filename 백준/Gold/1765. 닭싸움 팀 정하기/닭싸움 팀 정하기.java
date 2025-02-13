@@ -28,11 +28,8 @@ public class Main {
             int p = Integer.parseInt(st.nextToken());
             int q = Integer.parseInt(st.nextToken());
         
-            // System.out.println(p + " " + q + " " + c);
-            // System.out.println(p + " : " + find(p,'F') + " : " + find(p,'E'));
-            // System.out.println(q + " : " + find(q,'F') + " : " + find(q,'E'));
             if (c == 'F') {     // 친구
-                union(p,q,c);
+                union(p,q);
             } else {            // 적
                 sets[p].add(q);
                 sets[q].add(p);
@@ -45,13 +42,13 @@ public class Main {
             Iterator<Integer> iter = sets[n].iterator();
             int root = iter.next();
             while(iter.hasNext()) {
-                union(root, iter.next(), 'F');
+                union(root, iter.next());
             }
         }
         
         isCounted = new boolean[N+1];
         for (int n=1; n<=N; n++) {
-            int parentN = find(n,'F');
+            int parentN = find(n);
             if (isCounted[parentN]) continue;
             isCounted[parentN] = true;
             answer++;
@@ -68,19 +65,14 @@ public class Main {
         }
     }
     
-    static int find(int a, char target) {
-        int[] roots = null;
-        if (target == 'F') {
-            roots = parents;
-        }
-        
-        if (roots[a] == a) return roots[a];
-        return roots[a] = find(roots[a], target);
+    static int find(int a) {
+        if (parents[a] == a) return parents[a];
+        return parents[a] = find(parents[a]);
     }
     
-    static boolean union(int a, int b, char target) {
-        int parentA = find(a, target);
-        int parentB = find(b, target);
+    static boolean union(int a, int b) {
+        int parentA = find(a);
+        int parentB = find(b);
         
         if (parentA == parentB) return false;
         parents[parentB] = parentA;
