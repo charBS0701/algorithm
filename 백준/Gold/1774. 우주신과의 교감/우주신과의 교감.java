@@ -24,7 +24,7 @@ public class Main {
     static int N, M;
     static God[] gods;
     static int[] parents;
-    static List<Edge> edgeList = new ArrayList<>();
+    static PriorityQueue<Edge> edgeList = new PriorityQueue<>((o1,o2) -> Double.compare(o1.c,o2.c));
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -47,8 +47,6 @@ public class Main {
             }
         }
         
-        Collections.sort(edgeList, (o1,o2) -> Double.compare(o1.c,o2.c));   // 정렬
-        
         makeSet();        
         
         int pathCnt = 0;
@@ -61,11 +59,11 @@ public class Main {
         }
         
         double accDis = 0.0;
-        for (Edge e : edgeList) {
+        while (!edgeList.isEmpty()) {
+            Edge e = edgeList.poll();
             if (!union(e.a,e.b)) continue;      // 사이클
-            accDis += getDis(e.a,e.b);
-            pathCnt++;
-            if (pathCnt == N-1) break;
+            accDis += e.c;
+            if (++pathCnt == N-1) break;
         }
         
         System.out.printf("%.2f", accDis);
