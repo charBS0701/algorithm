@@ -7,8 +7,7 @@ public class Main {
     static char[][] mat;
     static int[] dy = new int[]{-1,1,0,0};
     static int[] dx = new int[]{0,0,-1,1};
-    static int[][][] visited;
-    static final int INF = Integer.MAX_VALUE;
+    static boolean[][][] visited;
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,46 +23,44 @@ public class Main {
             }
         }
         
-        visited = new int[N+1][M+1][K+1];
-        for (int n=1; n<=N; n++) {
-            for (int m=1; m<=M; m++) {
-                Arrays.fill(visited[n][m], INF);
-            }
-        }        
+        visited = new boolean[N+1][M+1][K+1];
         
-        bfs();
-        
-        int result = INF;
-        for (int k=0; k<=K; k++) {
-            result = Math.min(result, visited[N][M][k]);
-        }
-        System.out.println(result == INF ? -1 : result);
+        if (!bfs()) System.out.println(-1);
     }
     
-    static void bfs() {
+    static boolean bfs() {
         Deque<Dot> que = new ArrayDeque<>();
         que.add(new Dot(1,1,0,1));
-        visited[1][1][0] = 1;
+        visited[1][1][0] = true;
 
         while (!que.isEmpty()) {
             Dot now = que.poll();
-            if (now.y == N && now.x == M) break;
+            if (now.y == N && now.x == M) {
+                System.out.println(now.depth);
+                return true;
+            }
+            
             for (int d=0; d<4; d++) {
                 int ny = now.y + dy[d];
                 int nx = now.x + dx[d];
                 if (ny <= 0 || nx <= 0 || ny > N || nx > M) continue;   // 지도 밖
-                if (now.did == K && mat[ny][nx] == '1') continue;       // 부수기 다 썼는데 막힘
-                else if (visited[ny][nx][now.did] <= now.depth+1) continue;     // 이미 더 짧게 온 곳
+                if (visited[ny][nx][now.did]) continue;               // 이미 방문
                 
-                if (mat[ny][nx] == '0') {  // 갈 수 있음
-                    visited[ny][nx][now.did] = now.depth + 1;
+                if (mat[ny][nx] == '0') {                               // 갈 수 있음
+                    visited[ny][nx][now.did] = true;
                     que.add(new Dot(ny,nx,now.did,now.depth+1));
-                } else if (mat[ny][nx] == '1' && now.depth + 1 < visited[ny][nx][now.did+1]) {  // 부수기 사용
-                    visited[ny][nx][now.did+1] = now.depth + 1;
-                    que.add(new Dot(ny,nx,now.did+1,now.depth+1));
+                } else {                                                // 벽 느낌
+                    if (now.did == K) continue;                         // 부수기 다 썼음
+                    else {                                              // 부수기 사용
+                        if(visited[ny][nx][now.did+1]) continue;
+                        visited[ny][nx][now.did+1] = true;
+                        que.add(new Dot(ny,nx,now.did+1,now.depth+1));
+                    }
                 }
             }
         }
+        
+        return false;
     }
     
     static class Dot {
