@@ -12,6 +12,8 @@ public class Main {
     static int[] dx = new int[]{0,0,-1,1};
     static Deque<Dot> que = new ArrayDeque<>();
     static int[] parents;
+    static int[] rank;
+    static StringBuilder sb = new StringBuilder();
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -56,29 +58,15 @@ public class Main {
                 }
             }
         }
-        
-        
-        
-        // for (int y=0; y<N; y++) {
-        //     for (int x=0; x<M; x++) {
-        //         int idx = y*M + x;
-        //         int parentIdx = find(idx);
-        //         int parentY = parentIdx/M;
-        //         int parentX = parentIdx%M;                    
-                
-        //         System.out.print(result[parentY][parentX]);
-        //     }
-        //     System.out.println();
-        // }         
-        
-        // System.out.println();
 
         for (int y=0; y<N; y++) {
             for (int x=0; x<M; x++) {
-                System.out.print(answer[y][x]%10);
+                sb.append(answer[y][x]%10);
             }
-            System.out.println();
-        }        
+            sb.append("\n");
+        }
+        
+        System.out.println(sb);
         
     }
     
@@ -118,8 +106,10 @@ public class Main {
     
     static void makeSet() {
         parents = new int[N*M];
+        rank = new int[N*M];
         for (int i=0; i<parents.length; i++) {
             parents[i] = i;
+            rank[i] = 1;
         }
     }
     
@@ -132,10 +122,15 @@ public class Main {
         int parentsA = find(a);
         int parentsB = find(b);
         if (parentsA == parentsB) return false;
-        parents[parentsB] = parentsA;
+        
+        if (rank[parentsA] > rank[parentsB]) parents[parentsB] = parentsA;
+        else if (rank[parentsB] > rank[parentsA]) parents[parentsA] = parentsB;
+        else {
+            parents[parentsB] = parentsA;
+            rank[parentsA]++;
+        }
+        
         return true;
     }
-    
-    
     
 }
