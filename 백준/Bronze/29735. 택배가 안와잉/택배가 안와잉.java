@@ -1,50 +1,38 @@
 import java.io.*;
 import java.util.*;
+import java.time.*;
 
 public class Main {
     
     static int N, T;
-    static int start, end;
-    static int day;
+    static LocalTime start, end;
     static StringBuilder sb = new StringBuilder();
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        start = getMinute(st.nextToken());
-        end = getMinute(st.nextToken());
+        start = LocalTime.parse(st.nextToken());
+        end = LocalTime.parse(st.nextToken());
         
         st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         T = Integer.parseInt(st.nextToken());
         
-        int time = start;
-        for (int n=0; n<N+1; n++) {
-            if (time + T < end) {   // 오늘 배송 가능
-                time += T;
-            } else {
-                day++;      // 다음날 배송
-                time = start;
-                n--;
+        int n=0;    // 보낸 택배수
+        int day=0;  // 경과한 날짜
+        LocalTime now = LocalTime.of(start.getHour(),start.getMinute());
+        while (n<N+1) {
+            if (now.plusMinutes(T).isBefore(end))   { // 해당 날에 택배 보낼 수 있음
+                n++;
+                now = now.plusMinutes(T);
+            } else {                        // 내일 보내자
+                day++;
+                now = LocalTime.of(start.getHour(),start.getMinute());
             }
         }
         
-        String answer = toFormat(time);
-        
-        sb.append(day).append("\n").append(answer);
-
+        sb.append(day).append("\n").append(now.toString());
         System.out.println(sb);
-    }
-    
-    static int getMinute(String s) {
-        int hour = Integer.valueOf(s.split(":")[0]);
-        int min = Integer.valueOf(s.split(":")[1]);
-        return hour * 60 + min;
-    }
-    
-    static String toFormat(int time) {
-        int hour = time/60;
-        int min = time%60;
-        return String.format("%02d", hour) + ":" + String.format("%02d", min);
+        
     }
 }
