@@ -39,27 +39,22 @@ class Solution {
     static int[] dy = new int[]{-1,1,0,0};
     static int[] dx = new int[]{0,0,-1,1};
     static Set<Edge> visited = new HashSet<>();
-    static int[][] mat = new int[11][11];
     
     public int solution(String dirs) {
-        int answer = 0;
         
-        Dot now = new Dot(5,5);
+        Dot now = new Dot(0,0);
         for (char c : dirs.toCharArray()) {
             int dir = "UDLR".indexOf(c);
             Dot next = new Dot(now.y + dy[dir],now.x + dx[dir]);
             
-            if (next.y < 0 || next.x < 0 || next.y > 10 || next.x > 10) continue;
+            if (next.y < -5 || next.x < -5 || next.y > 5 || next.x > 5) continue;
             
             Edge edge = new Edge(new Dot(now.y,now.x), new Dot(next.y,next.x));
-            if (!visited.contains(edge)) {
-                answer++;
-                visited.add(edge);
-            }
+            if (!visited.contains(edge))    visited.add(edge);
             
             now = next;
         }
         
-        return answer;
+        return visited.size();
     }
 }
