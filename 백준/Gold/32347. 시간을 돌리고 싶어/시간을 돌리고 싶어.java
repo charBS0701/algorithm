@@ -24,13 +24,11 @@ public class Main {
         int r = N;
         
         while (l<=r) {
-            Arrays.fill(visited, false);
-            
             int mid = l + (r-l)/2;
             
             if (bfs(mid)) {
                 r = mid-1;
-                T = Math.min(T, mid);
+                T = mid;
             } else {
                 l = mid+1;
             }
@@ -41,7 +39,9 @@ public class Main {
     }
     
     static boolean bfs(int t) {
+        Arrays.fill(visited, false);
         Deque<int[]> que = new ArrayDeque<>();
+        
         que.offer(new int[]{N,0});
         visited[N] = true;
         
@@ -52,11 +52,14 @@ public class Main {
             if (next <= 1 && now[1] < K) return true;
             else if (now[1] == K) return false;
             
-            while (visited[next] == false) {
-                if (arr[next] == 1) que.offer(new int[]{next,now[1]+1});
-                visited[next] = true;
-                next++;
+            for (int i=next; i<now[0]; i++) {
+                if (arr[i] == 1 && !visited[i]) {
+                    que.offer(new int[]{i, now[1]+1});
+                    visited[i] = true;
+                    break;
+                }
             }
+            
         }
         
         return false;
