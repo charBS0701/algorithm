@@ -1,43 +1,47 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken()); // 표의 크기 // 1 ≤ N ≤ 1024
-		int M = Integer.parseInt(st.nextToken()); // 합을 구해야하는 횟수 // 1 ≤ M ≤ 100,000
-
-		// 수 입력
-		int[][] arr = new int[N + 1][N + 1];
-		for (int r = 1; r <= N; r++) {
-			st = new StringTokenizer(br.readLine());
-			for (int c = 1; c <= N; c++) {	//  왼쪽으로 사각형으로의 누적합을 구하며 입력
-				arr[r][c] = -arr[r - 1][c - 1] + arr[r - 1][c] + arr[r][c - 1] + Integer.parseInt(st.nextToken());
-			}
-		}
-
-		// 구간 입력
-		StringBuilder sb = new StringBuilder();
-		for (int m = 0; m < M; m++) {
-			st = new StringTokenizer(br.readLine());
-			int i1 = Integer.parseInt(st.nextToken());
-			int j1 = Integer.parseInt(st.nextToken());
-			int i2 = Integer.parseInt(st.nextToken());
-			int j2 = Integer.parseInt(st.nextToken());
-			
-			// 뺴고 빼고 겹친 부분 더하고
-			int result = arr[Math.max(i1, i2)][Math.max(j1, j2)];
-			result -= arr[Math.max(i1, i2)][Math.min(j1, j2) - 1];
-			result -= arr[Math.min(i1, i2) - 1][Math.max(j1, j2)];
-			result += arr[Math.min(i1, i2) - 1][Math.min(j1, j2) - 1];
-			sb.append(result + "\n");
-		}
-
-		System.out.println(sb);
+public class Main
+{   
+    
+    static int N, M;
+    static int[][] mat, acc;
+    
+    static StringBuilder sb = new StringBuilder();
+    
+	public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        
+        mat = new int[N+1][N+1];
+        acc = new int[N+1][N+1];
+        
+        for (int n=1; n<=N; n++) {
+            st = new StringTokenizer(br.readLine());
+            for (int m=1; m<=N; m++) {
+                mat[n][m] = Integer.parseInt(st.nextToken());
+            }
+        }
+        
+        // 누적합
+        for (int n=1; n<=N; n++) {
+            for (int m=1; m<=N; m++) {
+                acc[n][m] = mat[n][m] + acc[n-1][m] + acc[n][m-1] - acc[n-1][m-1];
+            }
+        }
+        
+        for (int m=0; m<M; m++) {
+            st = new StringTokenizer(br.readLine());
+            int r1 = Integer.parseInt(st.nextToken());
+            int c1 = Integer.parseInt(st.nextToken());
+            int r2 = Integer.parseInt(st.nextToken());
+            int c2 = Integer.parseInt(st.nextToken());
+            sb.append(acc[r2][c2] - acc[r2][c1-1] - acc[r1-1][c2] + acc[r1-1][c1-1]).append("\n");
+        }
+        
+        System.out.println(sb);
+        
 	}
-
 }
