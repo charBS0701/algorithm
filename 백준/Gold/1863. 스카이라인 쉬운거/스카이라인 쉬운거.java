@@ -17,29 +17,15 @@ public class Main {
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
             
-            if (y == 0) {
-                answer += stack.size();
-                stack.clear();
-                continue;
+            while (!stack.isEmpty() && y < stack.peek()) {
+                answer++;
+                stack.pop();
             }
             
-            if (stack.isEmpty()) {
-                stack.push(y);
-                continue;
-            }
-            
-            while (!stack.isEmpty()) {
-                if (y < stack.peek()) {
-                    answer++;
-                    stack.pop();
-                    
-                    if (stack.isEmpty()) {
-                        stack.push(y);
-                        break;
-                    }
-                } else if (y > stack.peek()) {
+            if (stack.isEmpty() || stack.peek() < y) {
+                if (y!=0) {
                     stack.push(y);
-                } else break;
+                }
             }
         }
         
